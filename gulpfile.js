@@ -1,7 +1,7 @@
-const { series, src, dest, watch } = require('gulp');
+const { series, src, dest,  watch } = require('gulp');
 const sass = require('gulp-sass'); // no le hace falta los {} porque gulp-sass solo tiene una funcion. en gulp tenes varios entonces debemos determinar que elementos de gulp queremos
 const imagemin = require('gulp-imagemin');
-const notify = require('gulp-notify');
+/* const notify = require('gulp-notify'); */
 const webp = require('gulp-webp');
 
 /* utilidades css */
@@ -12,13 +12,14 @@ const sourcemaps =require('gulp-sourcemaps');
 
 
 /* utilidades js */
-//const terser = require('gulp-terser-js');
+const concat = require('gulp-concat');
+const terser = require('gulp-terser-js');
 
 // funcion que compila SASS
 const paths = {
     imagenes: 'src/img/**/*',
     scss:'src/scss/**/*.scss',
-   // js: 'src/js/**/*.js'
+   js: 'src/js/**/*.js'
 }
 
 function css(){
@@ -36,12 +37,12 @@ function minificarcss(){
         }))
         .pipe( dest('./build/css') )
 }
-/* function javascript() {
+function javascript() {
     return src(paths.js)
     .pipe( concat('bundle.js'))
     .pipe( terser())
     .pipe( dest('./build/js'))
-} */
+}
 
 function imagenes(){
     return src(paths.imagenes)
@@ -65,4 +66,4 @@ exports.css = css;
 exports.imagenes = imagenes;
 exports.watchArchivos = watchArchivos; 
 
-exports.default = series( css,  imagenes, versionWebp, watchArchivos );
+exports.default = series( css,  imagenes, javascript, versionWebp, watchArchivos );
